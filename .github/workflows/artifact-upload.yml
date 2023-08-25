@@ -5,7 +5,7 @@ on:
 jobs:
   create-artifact:
     env:
-      ARTIFACT_NAME: pr-build.zip
+      ARTIFACT_NAME: pr-build
       ARTIFACT_PATH: ./
     name: Test build
     runs-on: ubuntu-latest
