@@ -13,7 +13,6 @@ jobs:
       - name: Get Artifact URL & PR Info
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          GITHUB_SERVER_URL: ${{ github.server_url }}
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
           WORKFLOW_RUN_EVENT_OBJ: ${{ toJSON(github.event.workflow_run) }}
@@ -36,11 +35,6 @@ jobs:
           echo "ARTIFACT ID: $ARTIFACT_ID"
           echo "ARTIFACT_ID=$ARTIFACT_ID" >> "$GITHUB_ENV"
 
-          ARTIFACT_URL=$("$GITHUB_SERVER_URL/$OWNER/$REPO/suites/$PREVIOUS_SUITE_ID/artifacts/$ARTIFACT_ID")
-            
-          echo "ARTIFACT URL: $ARTIFACT_URL"
-          echo "ARTIFACT_URL=$ARTIFACT_URL" >> "$GITHUB_ENV"
-
           PR_NUMBER=$(jq -r '.pull_requests[0].number' \
             <<< "$WORKFLOW_RUN_EVENT_OBJ")
 
@@ -57,6 +51,9 @@ jobs:
         env:
           JOB_PATH: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ env.PREVIOUS_JOB_ID }}"
           HEAD_SHA: ${{ env.HEAD_SHA }}
+          SUITES_PATH: "${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}/suites"
+          PREVIOUS_SUITE_ID: ${{ env.PREVIOUS_SUITE_ID }}
+          ARTIFACT_ID: ${{ env.ARTIFACT_ID }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ env.PR_NUMBER }}
@@ -75,6 +72,6 @@ jobs:
 
             | Logs      | ${{ env.JOB_PATH }}
 
-            | Extension Build | ${{ env.ARTIFACT_URL }}
+            | Extension Build | ${{ env.SUITES_PATH }}/${{ env.PREVIOUS_SUITE_ID }}/artifacts/${{ env.ARTIFACT_ID }}
 
             [badge]: https://img.shields.io/badge/Build-Success!-3fb950?logo=github&style=for-the-badge
