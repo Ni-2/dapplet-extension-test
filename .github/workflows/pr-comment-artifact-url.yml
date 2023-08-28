@@ -27,11 +27,16 @@ jobs:
           echo "Previous Suite ID: $PREVIOUS_SUITE_ID"
           echo "PREVIOUS_SUITE_ID=$PREVIOUS_SUITE_ID" >> "$GITHUB_ENV"
           
-          ARTIFACT_URL=$(gh api "/repos/$OWNER/$REPO/actions/artifacts" \
+          ARTIFACT_ID=$(gh api "/repos/$OWNER/$REPO/actions/artifacts" \
             --jq ".artifacts.[] |
             select(.workflow_run.id==${PREVIOUS_JOB_ID}) |
             select(.expired==false) |
-            .archive_download_url")
+            .id")
+            
+          echo "ARTIFACT ID: $ARTIFACT_ID"
+          echo "ARTIFACT_ID=$ARTIFACT_ID" >> "$GITHUB_ENV"
+
+          ARTIFACT_URL=$("$GITHUB_SERVER_URL/$OWNER/$REPO/suites/$PREVIOUS_SUITE_ID/artifacts/$ARTIFACT_ID")
             
           echo "ARTIFACT URL: $ARTIFACT_URL"
           echo "ARTIFACT_URL=$ARTIFACT_URL" >> "$GITHUB_ENV"
@@ -71,7 +76,5 @@ jobs:
             | Logs      | ${{ env.JOB_PATH }}
 
             | Extension Build | ${{ env.ARTIFACT_URL }}
-
-            | Suite ID | ${{ env.PREVIOUS_SUITE_ID }}
 
             [badge]: https://img.shields.io/badge/Build-Success!-3fb950?logo=github&style=for-the-badge
