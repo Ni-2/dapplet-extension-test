@@ -1,7 +1,7 @@
 name: Artifact Upload
 on:
   pull_request:
-    branches: [dap-3850]
+    branches: [master, develop]
 jobs:
   create-artifact:
     env:
