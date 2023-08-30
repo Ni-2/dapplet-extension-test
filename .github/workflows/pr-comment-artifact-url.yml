@@ -67,11 +67,9 @@ jobs:
             Please note that files only stay for around 90 days!
 
             | Name      | Link
-            --------------------------------------------------------------------
+            | :-------- | :--
             | Commit    | ${{ env.HEAD_SHA }}
-
             | Logs      | ${{ env.JOB_PATH }}
-
             | Extension Build | ${{ env.SUITES_PATH }}/${{ env.PREVIOUS_SUITE_ID }}/artifacts/${{ env.ARTIFACT_ID }}
 
             [badge]: https://img.shields.io/badge/Build-Success!-3fb950?logo=github&style=for-the-badge
